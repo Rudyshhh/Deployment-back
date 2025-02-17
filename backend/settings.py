@@ -75,18 +75,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
+import os
+from urllib.parse import urlparse
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+DB_URL="postgresql://youtube_lb4u_user:isJcCnvY6J7Fzoc4Kb1ImHNMjeyPySnu@dpg-cupn11dumphs73e92nvg-a.oregon-postgres.render.com/youtube_lb4u"
+parsed_db_url = urlparse(DB_URL)
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'youtube_db',
-        'USER': 'postgres',
-        'PASSWORD': 'june',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': parsed_db_url.path[1:],  # Removes leading slash from the db name
+        'USER': parsed_db_url.username,
+        'PASSWORD': parsed_db_url.password,
+        'HOST': parsed_db_url.hostname,
+        'PORT': parsed_db_url.port,
     }
 }
 
